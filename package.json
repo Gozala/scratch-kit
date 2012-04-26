@@ -1,0 +1,33 @@
+{
+  "name": "scratch-kit",
+  "id": "scratch-kit",
+  "version": "0.0.1",
+  "description": "Scratchpad for add-on SDK",
+  "keywords": [ "scratch-kit" ],
+  "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+  "homepage": "https://github.com/Gozala/scratch-kit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gozala/scratch-kit.git",
+    "web": "https://github.com/Gozala/scratch-kit"
+  },
+  "bugs": {
+    "url": "http://github.com/Gozala/scratch-kit/issues/"
+  },
+  "main": "./core.js",
+  "scripts": {
+    "test": "node tests/test-all.js",
+    "repl": "node node_modules/repl-utils",
+    "swank": "node node_modules/swank-js"
+  },
+  "preferences": [{
+    "name": "path",
+    "title": "Add-on SDK file URI on local filesystem",
+    "type": "string",
+    "value": "file://"
+  }],
+  "licenses": [{
+    "type" : "MIT",
+    "url" : "http://jeditoolkit.com/LICENSE"
+  }]
+}
