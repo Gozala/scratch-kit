@@ -49,6 +49,7 @@ self.port.on('pathChange', function(path) {
     resolve: resolve
   })
   let modules = override({}, loader.modules)
+  let module = { id: '@scratch-kit', uri: uri }
 
 
   function require(id, options) {
@@ -61,7 +62,6 @@ self.port.on('pathChange', function(path) {
     return require.run(id)
   }
   require.run = Require(loader, module)
-  let module = { id: '@scratch-kit', uri: uri }
   unsafeWindow.console = console
   unsafeWindow.require = require
   unsafeWindow.loader = loader
