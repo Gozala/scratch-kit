@@ -24,5 +24,10 @@ require('/path/to/module') // returns module from that path
 require('/path/to/module', { reload: true })
 ```
 
+**Note:** There is a [Bug 741267][] on Firefox Nightly an Aurora builds,
+that breaks scratchpad little bit, there you have to use `window.require`
+instead of just `require` until the bug is fixed.
+
+[Bug 741267]:https://bugzilla.mozilla.org/show_bug.cgi?id=741267
 [Scratchpad]:https://developer.mozilla.org/en/Tools/Scratchpad
 [Add-on SDK]:https://github.com/mozilla/addon-sdk
