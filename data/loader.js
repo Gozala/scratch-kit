@@ -26,6 +26,9 @@ function normalize(uri) {
 
 self.port.on('pathChange', function(path) {
   let SDK_ROOT = path
+  if (SDK_ROOT.subtr(-1) !== '/')
+    SDK_ROOT += '/'
+
   function resolve(id, requirer) {
     let uri = null
     if (loader && id in loader.modules)
