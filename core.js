@@ -24,3 +24,9 @@ preferences.on('path', function(path) {
     worker.port.emit('pathChange', preferences.prefs.path)
   })
 })
+
+
+const tabs = require("tabs");
+if (tabs.length==1) {
+  tabs[0].url = ("about:addons");  // let's go somewhere useful
+}
