@@ -9,6 +9,14 @@ installed go to 'about:addons' and set preference of **scratch-kit** add-on
 to a directory where you have cloned [Add-on SDK]. It should be something like
 this: `file:///Users/gozala/Projects/addon-sdk/`.
 
+Alternately:
+
+```
+cd scratch-kit
+SDK=/path/to/sdk make build
+cfx run
+```
+
 # Use
 
 Once you're done with a setup you can use scratchpad with jetpack enabled
@@ -23,6 +31,9 @@ require('/path/to/module') // returns module from that path
 // to load modules after you modified them.
 require('/path/to/module', { reload: true })
 ```
+
+
+
 
 **Note:** There is a [Bug 741267][] on Firefox Nightly an Aurora builds,
 that breaks scratchpad little bit, there you have to use `window.require`
