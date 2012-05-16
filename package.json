@@ -1,7 +1,7 @@
 {
   "name": "scratch-kit",
   "id": "scratch-kit",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Scratchpad for add-on SDK",
   "keywords": [ "scratch-kit" ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
@@ -24,7 +24,12 @@
     "name": "path",
     "title": "Add-on SDK file URI on local filesystem",
     "type": "string",
-    "value": "file://"
+    "value": ""
+  }, {
+    "name": "base",
+    "title": "File URI to be used as base for system module",
+    "type": "string",
+    "value": ""
   }],
   "licenses": [{
     "type" : "MIT",
