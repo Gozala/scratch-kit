@@ -18,7 +18,7 @@ be used to bring up scratchpad with jetpack context with in it. Following
 examples give you an idea what can be done:
 
 ```js
-require('addon-kit/tabs').open('data:text/html,Wellcome to scratch-kit')
+require('addon-kit/tabs').open('data:text/html,Welcome to scratch-kit')
 require('/path/to/module') // returns module from that path
 
 // Once module is loaded it's cached, but you can force reload. This is useful
