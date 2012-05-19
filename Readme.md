@@ -27,7 +27,18 @@ require('/path/to/module', { reload: true })
 ```
 
 All the changes done by exectuing code in scratchpad can be undone by simply
-closing scratchpad window. Enjoy hacking your browser!
+closing scratchpad window.
+
+You could also start playing with code examples from
+[Add-on SDK documentation][]. For example go to the
+[widget API documentation page][] and click green button on in the right top
+corner of the first code example. You will get a new scratchpad with that
+example in it ready to execute. If close scratchpad window any changes done
+by it will be unloaded!
+
+Enjoy hacking your browser!
 
 [Scratchpad]:https://developer.mozilla.org/en/Tools/Scratchpad
 [Add-on SDK]:https://github.com/mozilla/addon-sdk
+[Add-on SDK documentation]:https://addons.mozilla.org/en-US/developers/docs/sdk/latest/
+[widget documentation page]:https://addons.mozilla.org/en-US/developers/docs/sdk/latest/packages/addon-kit/widget.html
