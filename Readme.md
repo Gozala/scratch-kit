@@ -49,4 +49,4 @@ gives the 'regular' scratchpad, which won't work.
 [Scratchpad]:https://developer.mozilla.org/en/Tools/Scratchpad
 [Add-on SDK]:https://github.com/mozilla/addon-sdk
 [Add-on SDK documentation]:https://addons.mozilla.org/en-US/developers/docs/sdk/latest/
-[widget documentation page]:https://addons.mozilla.org/en-US/developers/docs/sdk/latest/packages/addon-kit/widget.html
+[widget API documentation page]:https://addons.mozilla.org/en-US/developers/docs/sdk/latest/packages/addon-kit/widget.html
