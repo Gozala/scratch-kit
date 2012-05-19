@@ -5,6 +5,8 @@ let { Scratchpad } = require('./scratchpad')
 let { prefs } = require('simple-prefs')
 let { Hotkey } = require('hotkeys')
 
+require('./doc-mod')
+
 let main = require.main;
 
 function baseURI() {
