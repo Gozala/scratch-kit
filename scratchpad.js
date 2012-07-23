@@ -42,7 +42,10 @@ function Scratchpad(options) {
       writeAsComment: {
         configurable: true,
         value: function(value) {
-          let result = value && value.toString ? value : Object.prototype.toString.call(value)
+          let result = JSON.stringify(value, function(key, value) {
+            return typeof(value) === 'function' ? String(value).replace(/{[\s\S]*}/g, '{ /* ... */ }') :
+                   value
+          }, 2)
           return writeAsComment.call(this, result)
         }
       }

@@ -1,7 +1,7 @@
 {
   "name": "scratch-kit",
   "id": "scratch-kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Scratchpad for add-on SDK",
   "keywords": [ "scratch-kit" ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",

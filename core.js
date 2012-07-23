@@ -1,9 +1,12 @@
-let { Loader, Require, Sandbox,
-      resolveID, unload, override } = require('api-utils/loader')
+'use strict';
+
+let { Loader, Require, Sandbox, load, Module, resolveURI, resolve,
+      unload, descriptor, override } = require('api-utils/loader')
 let { env, pathFor } = require('api-utils/system')
 let { Scratchpad } = require('./scratchpad')
 let { prefs } = require('simple-prefs')
 let { Hotkey } = require('hotkeys')
+let { loadReason } = require('self')
 
 require('./doc-mod')
 
@@ -29,7 +32,6 @@ function packagesURI() {
 
 
 function isRelative(id) { return id[0] === '.' }
-function isAbsolute(id) { return id[0] === '/' }
 function isPseudo(id) { return id === 'chrome' || id[0] === '@' }
 function normalize(id) {
   return id === 'self' ? 'api-utils/self' :
@@ -37,70 +39,62 @@ function normalize(id) {
 }
 function isSDK(id) {
   let name = id.split('/').shift()
-  return name === 'api-utils' || name === 'addon-kit'
-}
-function id2path(id) {
-  let paths = id.split('/')
-  paths.splice(1, 0, 'lib')
-  return paths.join('/')
-}
-function id2file(id) {
-  return id.indexOf(-3) === '.js' ? id : id + '.js'
+  return name === 'api-utils' || name === 'addon-kit' || 'test-harness'
 }
 
-function resolve(id, requirer, _) {
-  // We ignore passed in baseURI in favor of one in preferences or environment
-  // variables. This allows reflection of changes in configuration at runtime.
-  let base = baseURI()
-  let uri = null
-  if (isRelative(id) || isPseudo(id)) {
-    uri = resolveID(id, requirer, base)
-  } else if (isSDK(normalize(id))) {
-    uri = resolveID(id2path(normalize(id)), requirer, packagesURI())
-  } else if (isAbsolute(id)) {
-    uri = 'file://' + id2file(id)
-  } else {
-    uri = resolveID(id, requirer, base)
-  }
-  return uri
+function resolveID(id, requirer) {
+  return isRelative(id) ? resolve(id, requirer) :
+         !isPseudo(id) && isSDK(normalize(id)) ? normalize(id) :
+         id
 }
 
 function scratch(options) {
   let { text, name } = options || {}
 
   let loader = Loader({
-    baseURI: baseURI(),
-    rootURI: packagesURI(),
-    id: 'scratch-kit',
-    name: 'scratch kit',
+    id: '@scratch-kit',
+    name: 'scratch-kit',
     version: '0.0.1',
     main: module,
-    resolve: resolve
+    rootURI: normalizeURI(pathFor('Home')) + '.scratch-kit/',
+    prefixURI: normalizeURI(pathFor('Home')) + '.' ,
+    loadReason: loadReason,
+    paths: {
+      '/': 'file:///',
+      '': baseURI(),
+      'api-utils/': packagesURI() + 'api-utils/lib/',
+      'addon-kit/': packagesURI() + 'addon-kit/lib/',
+      'test-harness/': packagesURI() + 'test-harness/lib/',
+      './': normalizeURI(pathFor('Home')) + '.scratch-kit/'
+    },
+    resolve: resolveID
   })
 
   let require = new function() {
     let modules = loader.modules
+    let mapping = loader.mapping
     function require(id, options) {
       if (options && options.all) loader.modules = modules
       if (options && options.reload) {
-        let uri = loader.resolve(id, {}, baseURI())
+        let uri = resolveURI(id, mapping)
         delete loader.modules[uri]
         require.run('api-utils/system/events').emit('startupcache-invalidate', {})
       }
       return require.run(id)
     }
-    require.run = Require(loader, {})
+    require.run = Require(loader, { id: 'scratch-kit'})
     return require
   }
 
   // Override globals to make `console` available.
-  override(loader.globals, require('api-utils/globals'))
+  var globals = require('api-utils/globals');
+  Object.defineProperties(loader.globals, descriptor(globals));
 
   var window = Scratchpad({
     text: text || '// Jetpack scratchpad\n\n',
     sandbox: Sandbox({
       name: name || 'scratch-kit',
-      prototype: { require: require }
+      prototype: override(globals, { require: require })
     }),
     unload: unload.bind(unload, loader),
     open: scratch
