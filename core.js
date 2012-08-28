@@ -70,6 +70,8 @@ function scratch(options) {
     resolve: resolveID
   })
 
+  let module = Module('./scratch-kit', resolveURI('./scratch-kit', loader.mapping))
+
   let require = new function() {
     let modules = loader.modules
     let mapping = loader.mapping
@@ -82,9 +84,10 @@ function scratch(options) {
       }
       return require.run(id)
     }
-    require.run = Require(loader, { id: 'scratch-kit'})
+    require.run = Require(loader, module)
     return require
   }
+
 
   // Override globals to make `console` available.
   var globals = require('api-utils/globals');
@@ -94,7 +97,10 @@ function scratch(options) {
     text: text || '// Jetpack scratchpad\n\n',
     sandbox: Sandbox({
       name: name || 'scratch-kit',
-      prototype: override(globals, { require: require })
+      prototype: override(globals, {
+        require: require,
+        module: module
+      })
     }),
     unload: unload.bind(unload, loader),
     open: scratch
