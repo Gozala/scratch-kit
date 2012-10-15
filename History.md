@@ -1,5 +1,13 @@
 # Changes
 
+## 0.4.0 / 2012-10-15
+
+  - Make scratch-kit compatible with SDK's layout changes.
+
+## 0.3.0 / 2012-07-24
+
+  - Update scratch-kit to make it compatible with loader changes.
+
 ## 0.2.0 / 2012-05-19
 
   - Implemented feature to play with code examples from
