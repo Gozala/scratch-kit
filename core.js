@@ -1,12 +1,12 @@
 'use strict';
 
 let { Loader, Require, Sandbox, load, Module, resolveURI, resolve,
-      unload, descriptor, override } = require('api-utils/loader')
-let { env, pathFor } = require('api-utils/system')
+      unload, descriptor, override } = require('toolkit/loader')
+let { env, pathFor } = require('sdk/system')
 let { Scratchpad } = require('./scratchpad')
-let { prefs } = require('simple-prefs')
-let { Hotkey } = require('hotkeys')
-let { loadReason } = require('self')
+let { prefs } = require('sdk/simple-prefs')
+let { Hotkey } = require('sdk/hotkeys')
+let { loadReason } = require('sdk/self')
 
 require('./doc-mod')
 
@@ -26,8 +26,8 @@ function normalizeURI(uri) {
   return uri
 }
 
-function packagesURI() {
-  return normalizeURI(sdkURI()) + 'packages/'
+function libURI() {
+  return normalizeURI(sdkURI()) + 'lib/'
 }
 
 
@@ -62,9 +62,8 @@ function scratch(options) {
     paths: {
       '/': 'file:///',
       '': baseURI(),
-      'api-utils/': packagesURI() + 'api-utils/lib/',
-      'addon-kit/': packagesURI() + 'addon-kit/lib/',
-      'test-harness/': packagesURI() + 'test-harness/lib/',
+      'sdk/': libURI() + 'sdk/',
+      'toolkit/': libURI() + 'toolkit/',
       './': normalizeURI(pathFor('Home')) + '.scratch-kit/'
     },
     resolve: resolveID
@@ -80,7 +79,7 @@ function scratch(options) {
       if (options && options.reload) {
         let uri = resolveURI(id, mapping)
         delete loader.modules[uri]
-        require.run('api-utils/system/events').emit('startupcache-invalidate', {})
+        require.run('sdk/system/events').emit('startupcache-invalidate', {})
       }
       return require.run(id)
     }
@@ -90,7 +89,7 @@ function scratch(options) {
 
 
   // Override globals to make `console` available.
-  var globals = require('api-utils/globals');
+  var globals = require('sdk/system/globals');
   Object.defineProperties(loader.globals, descriptor(globals));
 
   var window = Scratchpad({

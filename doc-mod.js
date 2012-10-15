@@ -1,7 +1,7 @@
 'use strict'
 
 let core = require('./core')
-let { PageMod } = require('page-mod')
+let { PageMod } = require('sdk/page-mod')
 
 
 let mod = PageMod({
