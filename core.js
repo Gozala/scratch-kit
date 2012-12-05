@@ -1,7 +1,9 @@
 'use strict';
 
+let { Cu } = require('chrome')
+let loaderModule = require('toolkit/loader')
 let { Loader, Require, Sandbox, load, Module, resolveURI, resolve,
-      unload, descriptor, override } = require('toolkit/loader')
+      unload, descriptor, override } = loaderModule
 let { env, pathFor } = require('sdk/system')
 let { Scratchpad } = require('./scratchpad')
 let { prefs } = require('sdk/simple-prefs')
@@ -59,6 +61,9 @@ function scratch(options) {
     rootURI: normalizeURI(pathFor('Home')) + '.scratch-kit/',
     prefixURI: normalizeURI(pathFor('Home')) + '.' ,
     loadReason: loadReason,
+    modules: {
+      'toolkit/loader': loaderModule
+    },
     paths: {
       '/': 'file:///',
       '': baseURI(),
