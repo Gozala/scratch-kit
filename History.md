@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.1 / 2012-12-04
+
+  - Fix compatibility with https://github.com/mozilla/addon-sdk/pull/670
+
 ## 0.4.0 / 2012-10-15
 
   - Make scratch-kit compatible with SDK's layout changes.

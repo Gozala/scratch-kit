@@ -1,9 +1,16 @@
 {
   "name": "scratch-kit",
   "id": "scratch-kit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Scratchpad for add-on SDK",
-  "keywords": [ "scratch-kit" ],
+  "keywords": [
+    "scratch-kit",
+    "scratchpad",
+    "addon",
+    "repl",
+    "console",
+    "interactive"
+  ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
   "homepage": "https://github.com/Gozala/scratch-kit",
   "repository": {
@@ -16,9 +23,7 @@
   },
   "main": "./core.js",
   "scripts": {
-    "test": "node tests/test-all.js",
-    "repl": "node node_modules/repl-utils",
-    "swank": "node node_modules/swank-js"
+    "test": "node tests/test-all.js"
   },
   "preferences": [{
     "name": "path",
