@@ -58,6 +58,7 @@ function scratch(options) {
     name: 'scratch-kit',
     version: '0.0.1',
     main: module,
+    metadata: {},
     rootURI: normalizeURI(pathFor('Home')) + '.scratch-kit/',
     prefixURI: normalizeURI(pathFor('Home')) + '.' ,
     loadReason: loadReason,
@@ -115,7 +116,8 @@ function scratch(options) {
 exports.scratch = scratch
 
 function start() {
-  Hotkey({ combo: 'accel-alt-j', onPress: scratch })
+  Hotkey({ combo: 'alt-j', onPress: scratch })
+  Hotkey({ combo: 'meta-alt-j', onPress: scratch })
 }
 
 if (main === module) start()
