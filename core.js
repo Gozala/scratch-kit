@@ -1,81 +1,54 @@
-'use strict';
+"use strict";
 
-let { Cu } = require('chrome')
-let loaderModule = require('toolkit/loader')
+let { Cu } = require("chrome")
+let loaderModule = require("toolkit/loader")
 let { Loader, Require, Sandbox, load, Module, resolveURI, resolve,
       unload, descriptor, override } = loaderModule
-let { env, pathFor } = require('sdk/system')
-let { Scratchpad } = require('./scratchpad')
-let { prefs } = require('sdk/simple-prefs')
-let { Hotkey } = require('sdk/hotkeys')
-let { loadReason } = require('sdk/self')
+let { env, pathFor } = require("sdk/system")
+let { Scratchpad } = require("./scratchpad")
+let { prefs } = require("sdk/simple-prefs")
+let { Hotkey } = require("sdk/hotkeys")
+let { loadReason } = require("sdk/self")
 
-require('./doc-mod')
+require("./doc-mod")
 
-let main = require.main;
-
-function baseURI() {
-  return prefs.base || env.CFX_BASE || 'resource:///modules/'
-}
-
-function sdkURI() {
-  return prefs.path || env.CFX_ROOT || normalizeURI(pathFor('Home')) + 'addon-sdk'
+function libURI() {
+  let path = prefs.path || env.CFX_ROOT
+  return path ? normalizeURI(path) + "lib/" : "resource://gre/modules/commonjs/"
 }
 
 function normalizeURI(uri) {
-  uri = uri.substr(-1) === '/' ? uri : uri + '/'
-  uri = ~uri.indexOf('://') ? uri : 'file://' + uri
+  uri = uri.substr(-1) === "/" ? uri : uri + "/"
+  uri = ~uri.indexOf("://") ? uri : "file://" + uri
   return uri
 }
 
-function libURI() {
-  return normalizeURI(sdkURI()) + 'lib/'
-}
-
-
-function isRelative(id) { return id[0] === '.' }
-function isPseudo(id) { return id === 'chrome' || id[0] === '@' }
-function normalize(id) {
-  return id === 'self' ? 'api-utils/self' :
-         !~id.indexOf('/') ? 'addon-kit/' + id : id
-}
-function isSDK(id) {
-  let name = id.split('/').shift()
-  return name === 'api-utils' || name === 'addon-kit' || 'test-harness'
-}
-
-function resolveID(id, requirer) {
-  return isRelative(id) ? resolve(id, requirer) :
-         !isPseudo(id) && isSDK(normalize(id)) ? normalize(id) :
-         id
-}
+const HOME_URI = normalizeURI(pathFor("Home"))
 
 function scratch(options) {
   let { text, name } = options || {}
 
   let loader = Loader({
-    id: '@scratch-kit',
-    name: 'scratch-kit',
-    version: '0.0.1',
+    id: "@scratch-kit",
+    name: "scratch-kit",
+    version: "0.5.0",
     main: module,
     metadata: {},
-    rootURI: normalizeURI(pathFor('Home')) + '.scratch-kit/',
-    prefixURI: normalizeURI(pathFor('Home')) + '.' ,
+    rootURI: HOME_URI + ".scratch-kit/",
+    prefixURI: HOME_URI + "." ,
     loadReason: loadReason,
     modules: {
-      'toolkit/loader': loaderModule
+      "toolkit/loader": loaderModule
     },
     paths: {
-      '/': 'file:///',
-      '': baseURI(),
-      'sdk/': libURI() + 'sdk/',
-      'toolkit/': libURI() + 'toolkit/',
-      './': normalizeURI(pathFor('Home')) + '.scratch-kit/'
-    },
-    resolve: resolveID
+      "/": "file:///",
+      "./":  + ".scratch-kit/",
+      "": libURI(),
+    }
   })
 
-  let module = Module('./scratch-kit', resolveURI('./scratch-kit', loader.mapping))
+  let moduleURI = resolveURI("./scratch-kit", loader.mapping)
+  let module = Module("./scratch-kit", moduleURI)
 
   let require = new function() {
     let modules = loader.modules
@@ -85,7 +58,7 @@ function scratch(options) {
       if (options && options.reload) {
         let uri = resolveURI(id, mapping)
         delete loader.modules[uri]
-        require.run('sdk/system/events').emit('startupcache-invalidate', {})
+        require.run("sdk/system/events").emit("startupcache-invalidate", {})
       }
       return require.run(id)
     }
@@ -95,13 +68,13 @@ function scratch(options) {
 
 
   // Override globals to make `console` available.
-  var globals = require('sdk/system/globals');
-  Object.defineProperties(loader.globals, descriptor(globals));
+  var globals = require("sdk/system/globals")
+  Object.defineProperties(loader.globals, descriptor(globals))
 
   var window = Scratchpad({
-    text: text || '// Jetpack scratchpad\n\n',
+    text: text || "// Jetpack scratchpad\n\n",
     sandbox: Sandbox({
-      name: name || 'scratch-kit',
+      name: name || "scratch-kit",
       prototype: override(globals, {
         require: require,
         module: module
@@ -116,8 +89,8 @@ function scratch(options) {
 exports.scratch = scratch
 
 function start() {
-  Hotkey({ combo: 'alt-j', onPress: scratch })
-  Hotkey({ combo: 'meta-alt-j', onPress: scratch })
+  Hotkey({ combo: "alt-j", onPress: scratch })
+  Hotkey({ combo: "meta-alt-j", onPress: scratch })
 }
 
-if (main === module) start()
+if (require.main === module) start()
